@@ -1,8 +1,10 @@
 package com.estockmarket.authentication.config;
 
 import com.estockmarket.authentication.filter.JwtFilter;
+import org.springframework.web.reactive.function.client.WebClient;
 import com.estockmarket.authentication.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
+    }
+    
+    @Bean
+    @LoadBalanced
+    public WebClient.Builder loadBalancedWebClientBuilder() {
+     return WebClient.builder();
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
